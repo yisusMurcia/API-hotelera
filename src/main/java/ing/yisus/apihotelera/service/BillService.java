@@ -1,0 +1,38 @@
+package ing.yisus.apihotelera.service;
+
+import ing.yisus.apihotelera.Persistence.BillEntity;
+import ing.yisus.apihotelera.repository.BillRepository;
+
+import java.util.List;
+
+public class BillService {
+    private final BillRepository billRepository;
+    public BillService(BillRepository billRepository) {
+        this.billRepository = billRepository;
+    }
+
+    //Create, Read, Update, Delete (CRUD) methods for bill management
+    public void saveBill(BillEntity bill) {
+        billRepository.save(bill);
+    }
+    public BillEntity getBillById(Integer id) {
+        return billRepository.findById(id).orElse(null);
+    }
+    public void deleteBill(Integer id) {
+        BillEntity bill = getBillById(id);
+        if (bill != null) {
+            billRepository.delete(bill);
+        }
+    }
+    public BillEntity updateBill(BillEntity bill) {
+        if (billRepository.existsById(bill.getId())) {
+            return billRepository.save(bill);
+        }
+        return null; // or throw an exception
+    }
+
+    public List<BillEntity> getAllBills() {
+        return billRepository.findAll();
+    }
+
+}

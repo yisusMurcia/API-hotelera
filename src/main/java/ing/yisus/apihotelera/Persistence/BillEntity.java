@@ -12,7 +12,7 @@ public class BillEntity implements Serializable {
 
     @Id
     @Column(name = "id_factura")
-    private int idFactura;
+    private int id;
     @ManyToOne
     @JoinColumn(name = "fk_id_reserva")
     private ReservationEntity reservation;

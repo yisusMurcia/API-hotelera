@@ -12,7 +12,7 @@ import lombok.Data;
 public class GeneralAdminEntity {
     @Id
     @Column(name = "id_administrador_general")
-    private int idAdministradorGeneral;
+    private int id;
     private String correo;
     private String telefono;
     private String primer_nombre;
