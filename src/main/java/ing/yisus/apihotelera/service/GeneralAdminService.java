@@ -2,9 +2,11 @@ package ing.yisus.apihotelera.service;
 
 import ing.yisus.apihotelera.Persistence.GeneralAdminEntity;
 import ing.yisus.apihotelera.repository.GeneralAdminRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class GeneralAdminService {
     private final GeneralAdminRepository generalAdminRepository;
     public GeneralAdminService(GeneralAdminRepository generalAdminRepository) {

@@ -3,9 +3,11 @@ package ing.yisus.apihotelera.service;
 import ing.yisus.apihotelera.Persistence.ClientEntity;
 import ing.yisus.apihotelera.Persistence.EmployeeEntity;
 import ing.yisus.apihotelera.repository.EmployeeRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     public EmployeeService(EmployeeRepository employeeRepository) {

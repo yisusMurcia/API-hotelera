@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class RoomEntity implements Serializable {
     @Id
     @Column(name = "id_habitacion")
-    private long id;
+    private int id;
     @Column(name = "numero_habitacion")
     private int numeroDeHabitacion;
     @OneToOne

@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class ReservationEntity implements Serializable {
     @Id
     @Column(name = "id_reserva")
-    private int id_reserva;
+    private int id;
     private Timestamp fecha_inicio;
     private Timestamp fecha_final;
     private int cantidad_dias;

@@ -2,9 +2,11 @@ package ing.yisus.apihotelera.service;
 
 import ing.yisus.apihotelera.Persistence.HotelEntity;
 import ing.yisus.apihotelera.repository.HotelRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class HotelService {
     private final HotelRepository hotelRepository;
     public HotelService(HotelRepository hotelRepository) {

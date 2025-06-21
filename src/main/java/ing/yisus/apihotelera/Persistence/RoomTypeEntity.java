@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class RoomTypeEntity {
     @Id
     @Column(name = "id_tipo_habitacion")
-    private int id_tipo;
+    private int id;
     @ManyToOne
     @JoinColumn(name = "fk_id_hotel")
     private HotelEntity hotel;

@@ -2,9 +2,11 @@ package ing.yisus.apihotelera.service;
 
 import ing.yisus.apihotelera.Persistence.BillEntity;
 import ing.yisus.apihotelera.repository.BillRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class BillService {
     private final BillRepository billRepository;
     public BillService(BillRepository billRepository) {
