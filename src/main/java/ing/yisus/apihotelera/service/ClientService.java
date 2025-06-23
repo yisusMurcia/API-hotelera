@@ -14,8 +14,8 @@ public class ClientService {
     }
 
     //Create, Read, Update, Delete (CRUD) methods for client management
-    public void saveClient(ClientEntity client) {
-        clientRepository.save(client);
+    public ClientEntity saveClient(ClientEntity client) {
+        return clientRepository.save(client);
     }
     public ClientEntity getClientById(Integer id) {
         return clientRepository.findById(id).orElse(null);

@@ -16,8 +16,8 @@ public class RoomService {
     public RoomEntity getRoomById(int id) {
         return roomRepository.findById(id).orElse(null);
     }
-    public void saveRoom(RoomEntity room) {
-        roomRepository.save(room);
+    public RoomEntity saveRoom(RoomEntity room) {
+        return roomRepository.save(room);
     }
     public void deleteRoom(int id) {
         RoomEntity room = getRoomById(id);

@@ -14,8 +14,8 @@ public class HotelService {
     }
 
     // Create, Read, Update, Delete (CRUD) methods for hotel management
-    public void saveHotel(HotelEntity hotel) {
-        hotelRepository.save(hotel);
+    public HotelEntity saveHotel(HotelEntity hotel) {
+       return hotelRepository.save(hotel);
     }
     public HotelEntity getHotelById(Integer id) {
         return hotelRepository.findById(id).orElse(null);

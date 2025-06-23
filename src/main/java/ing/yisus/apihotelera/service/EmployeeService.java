@@ -15,8 +15,8 @@ public class EmployeeService {
     }
 
     // Create, Read, Update, Delete (CRUD) methods for employee management
-    public void saveEmployee(EmployeeEntity employee) {
-        employeeRepository.save(employee);
+    public EmployeeEntity saveEmployee(EmployeeEntity employee) {
+         return employeeRepository.save(employee);
     }
     public EmployeeEntity getEmployeeById(Integer id) {
         return employeeRepository.findById(id).orElse(null);

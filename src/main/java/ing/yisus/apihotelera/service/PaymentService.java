@@ -14,8 +14,8 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
     // Create, Read, Update, Delete (CRUD) methods for payment management
-    public void savePayment(PaymentEntity payment) {
-        paymentRepository.save(payment);
+    public PaymentEntity savePayment(PaymentEntity payment) {
+        return paymentRepository.save(payment);
     }
     public PaymentEntity getPaymentById(Integer id) {
         return paymentRepository.findById(id).orElse(null);

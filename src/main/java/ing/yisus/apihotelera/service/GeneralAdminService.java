@@ -14,8 +14,8 @@ public class GeneralAdminService {
     }
 
     //Create, Read, Update, Delete (CRUD) methods for general admin management
-    public void saveGeneralAdmin(GeneralAdminEntity generalAdmin) {
-        generalAdminRepository.save(generalAdmin);
+    public GeneralAdminEntity saveGeneralAdmin(GeneralAdminEntity generalAdmin) {
+        return generalAdminRepository.save(generalAdmin);
     }
     public GeneralAdminEntity getGeneralAdminById(Integer id) {
         return generalAdminRepository.findById(id).orElse(null);
@@ -28,7 +28,7 @@ public class GeneralAdminService {
         }
     }
     public GeneralAdminEntity updateGeneralAdmin(GeneralAdminEntity generalAdmin) {
-        if (generalAdminRepository.existsById(generalAdmin.getId())) {
+        if (generalAdminRepository.existsById(generalAdmin.getIdAdministradorGeneral())) {
             return generalAdminRepository.save(generalAdmin);
         }
         return null; // or throw an exception

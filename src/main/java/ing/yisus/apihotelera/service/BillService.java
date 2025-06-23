@@ -1,5 +1,6 @@
 package ing.yisus.apihotelera.service;
 
+import ing.yisus.apihotelera.Persistence.AdminEntity;
 import ing.yisus.apihotelera.Persistence.BillEntity;
 import ing.yisus.apihotelera.repository.BillRepository;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,14 @@ public class BillService {
     }
 
     //Create, Read, Update, Delete (CRUD) methods for bill management
-    public void saveBill(BillEntity bill) {
-        billRepository.save(bill);
+    public BillEntity saveBill(BillEntity bill) {
+        return billRepository.save(bill);
     }
+
+    public List<BillEntity> getBills() {
+        return billRepository.findAll();
+    }
+
     public BillEntity getBillById(Integer id) {
         return billRepository.findById(id).orElse(null);
     }

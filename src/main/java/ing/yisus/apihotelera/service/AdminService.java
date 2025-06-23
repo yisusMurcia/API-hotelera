@@ -1,43 +1,44 @@
 package ing.yisus.apihotelera.service;
 
+import ing.yisus.apihotelera.Persistence.AdminEntity;
 import ing.yisus.apihotelera.Persistence.HotelEntity;
-import ing.yisus.apihotelera.repository.HotelRepository;
+import ing.yisus.apihotelera.repository.AdminRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class AdminService {
-    private final HotelRepository hotelRepository;
+    private final AdminRepository adminRepository;
 
-    public AdminService(HotelRepository hotelRepository) {
-        this.hotelRepository = hotelRepository;
+    public AdminService(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
     }
 
     //Create, Read, Update, Delete (CRUD) methods for hotel management
-    public HotelEntity saveHotel(HotelEntity hotel) {
-        return hotelRepository.save(hotel);
+    public AdminEntity saveAdmin(AdminEntity admin) {
+        return adminRepository.save(admin);
     }
 
-    public List<HotelEntity> getAllHotels() {
-        return hotelRepository.findAll();
+    public List<AdminEntity> getAllAdmins() {
+        return adminRepository.findAll();
     }
 
-    public HotelEntity getHotelById(Integer id) {
-        return hotelRepository.findById(id).orElse(null);
+    public AdminEntity getAdminById(Integer id) {
+        return adminRepository.findById(id).orElse(null);
     }
 
-    public HotelEntity deleteHotel(Integer id) {
-        HotelEntity hotel = getHotelById(id);
-        if (hotel != null) {
-            hotelRepository.delete(hotel);
+    public AdminEntity deleteAdmin(Integer id) {
+        AdminEntity admin = getAdminById(id);
+        if (admin != null) {
+            adminRepository.delete(admin);
         }
-        return hotel;
+        return admin;
     }
 
-    public HotelEntity updateHotel(HotelEntity hotel) {
-        if (hotelRepository.existsById(hotel.getId())) {
-            return hotelRepository.save(hotel);
+    public AdminEntity updateAdmin(AdminEntity admin) {
+        if (adminRepository.existsById(admin.getIdAdmin())) {
+            return adminRepository.save(admin);
         }
         return null; // or throw an exception
     }

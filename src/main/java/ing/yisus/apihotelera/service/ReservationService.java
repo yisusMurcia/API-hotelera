@@ -12,8 +12,8 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
     // Create, Read, Update, Delete (CRUD) methods for reservation management
-    public void saveReservation(ReservationEntity reservation) {
-        reservationRepository.save(reservation);
+    public ReservationEntity saveReservation(ReservationEntity reservation) {
+        return reservationRepository.save(reservation);
     }
     public ReservationEntity getReservationById(Integer id) {
         return reservationRepository.findById(id).orElse(null);
