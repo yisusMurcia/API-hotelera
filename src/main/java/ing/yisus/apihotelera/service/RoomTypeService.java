@@ -4,6 +4,8 @@ import ing.yisus.apihotelera.Persistence.RoomTypeEntity;
 import ing.yisus.apihotelera.repository.RoomTypeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoomTypeService {
     private final RoomTypeRepository roomTypeRepository;
@@ -11,8 +13,12 @@ public class RoomTypeService {
         this.roomTypeRepository = roomTypeRepository;
     }
     // Create, Read, Update, Delete (CRUD) methods for room type management
-    public void saveRoomType(RoomTypeEntity roomType) {
-        roomTypeRepository.save(roomType);
+    public List<RoomTypeEntity> obtenerTiposDeHabitacion(){
+        return roomTypeRepository.findAll();
+    }
+
+    public RoomTypeEntity saveRoomType(RoomTypeEntity roomType) {
+       return roomTypeRepository.save(roomType);
     }
     public RoomTypeEntity getRoomTypeById(int id) {
         return roomTypeRepository.findById(id).orElse(null);

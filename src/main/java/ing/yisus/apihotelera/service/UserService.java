@@ -13,8 +13,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
     // Create, Read, Update, Delete (CRUD) methods for user management
-    public void saveUser(UserEntity user) {
-        userRepository.save(user);
+    public UserEntity saveUser(UserEntity user) {
+       return userRepository.save(user);
     }
     public UserEntity getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);
