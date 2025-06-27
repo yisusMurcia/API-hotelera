@@ -4,7 +4,9 @@ import ing.yisus.apihotelera.Persistence.RoomEntity;
 import ing.yisus.apihotelera.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomService {
@@ -34,4 +36,14 @@ public class RoomService {
     public List<RoomEntity> getAllRooms() {
         return roomRepository.findAll();
     }
+
+    public ArrayList<RoomEntity> getByType(int roomType){
+        return roomRepository.getRoomsByRoomType(roomType);
+    }
+
+    public Optional<RoomEntity> getById (int id){
+        return roomRepository.findById(id);
+    }
+
+
 }
