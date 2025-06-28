@@ -47,5 +47,13 @@ public class ReservationController {
 
         return ResponseEntity.ok(reservationService.obtenerReservaPorUsuario(id));
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> eliminarReserva(@PathVariable("id")int id ){
+        if (reservationService.getReservationById(id) == null){
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe la resesrva con id: " + id);
+        }
+        reservationService.deleteReservation(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
