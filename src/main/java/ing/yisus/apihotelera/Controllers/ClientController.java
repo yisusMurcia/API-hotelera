@@ -1,5 +1,6 @@
 package ing.yisus.apihotelera.Controllers;
 
+import ing.yisus.apihotelera.Exeption.ResourceNotFoundExeption;
 import ing.yisus.apihotelera.Persistence.ClientEntity;
 import ing.yisus.apihotelera.Persistence.UserEntity;
 import ing.yisus.apihotelera.service.ClientService;
@@ -26,12 +27,18 @@ public class ClientController {
 
     @GetMapping("/get/{id}")
     public ClientEntity obtenerCliente(@PathVariable int id){
+        if(clientService.getClientById(id) == null){
+            throw new ResourceNotFoundExeption("get","id", id);
+        }
         return clientService.getClientById(id);
     }
 
     @DeleteMapping("/delete/{id}")
     public void eliminarCliente(@PathVariable int id){
         ClientEntity client = clientService.getClientById(id);
+        if(clientService.getClientById(id) == null){
+            throw new ResourceNotFoundExeption("get","id", id);
+        }
         clientService.deleteClient(id);
 
         //Delete client id from user
@@ -44,6 +51,9 @@ public class ClientController {
 
     @PutMapping("/update/{id}")
     public ClientEntity actualizarCliente(@PathVariable int id, @RequestBody ClientEntity cliente){
+        if(clientService.getClientById(id) == null){
+            throw new ResourceNotFoundExeption("get","id", id);
+        }
         return clientService.updateClient(cliente);
     }
 
