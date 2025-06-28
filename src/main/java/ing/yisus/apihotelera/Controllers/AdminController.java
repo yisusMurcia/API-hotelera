@@ -1,11 +1,12 @@
 package ing.yisus.apihotelera.Controllers;
 
 import ing.yisus.apihotelera.Persistence.AdminEntity;
+import ing.yisus.apihotelera.Persistence.UserEntity;
 import ing.yisus.apihotelera.service.AdminService;
+import ing.yisus.apihotelera.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -13,13 +14,38 @@ import java.util.List;
 public class AdminController {
     @Autowired
     AdminService adminService;
+    @Autowired
+    UserService userService;
 
-    @GetMapping()
+    @GetMapping("/getAll")
     public List<AdminEntity> obtenerAdmins(){
         return adminService.getAllAdmins();
     }
 
-    @PostMapping()
+    @GetMapping("/get/{id}")
+    public AdminEntity obtenerAdminPorId(@PathVariable("id") Integer id){
+        return adminService.getAdminById(id);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void eliminarAdmin(@PathVariable("id") Integer id){
+        AdminEntity admin = adminService.getAdminById(id);
+        adminService.deleteAdmin(id);
+        //Delete the admin id from users
+        List<UserEntity> users = userService.getUsersByAdmin(admin);
+
+        for (UserEntity user : users) {
+            user.setAdmin(null);
+            userService.saveUser(user);
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public void updateAdmin(@RequestBody AdminEntity admin, @PathVariable("id") Integer id){
+        adminService.updateAdmin(admin);
+    }
+
+    @PostMapping("/create")
     public AdminEntity guardarAdmin(@RequestBody AdminEntity admin){
         return adminService.saveAdmin(admin);
     }

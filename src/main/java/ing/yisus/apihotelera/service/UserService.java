@@ -1,5 +1,7 @@
 package ing.yisus.apihotelera.service;
 
+import ing.yisus.apihotelera.Persistence.AdminEntity;
+import ing.yisus.apihotelera.Persistence.ClientEntity;
 import ing.yisus.apihotelera.Persistence.UserEntity;
 import ing.yisus.apihotelera.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -34,4 +36,11 @@ public class UserService {
     public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public List<UserEntity> getUsersByAdmin(AdminEntity admin) {
+        return userRepository.findByAdmin(admin);
+    }
+
+    public List<UserEntity> getUserByClient(ClientEntity client){
+        return userRepository.findByClient((client));}
 }

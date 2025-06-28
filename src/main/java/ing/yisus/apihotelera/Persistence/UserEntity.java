@@ -19,7 +19,7 @@ public class UserEntity implements Serializable {
     private String rol;
     @OneToOne
     @JoinColumn(name= "fk_id_cliente")
-    private ClientEntity cliente;
+    private ClientEntity client;
     @OneToOne
     @JoinColumn(name= "fk_id_empleado")
     private EmployeeEntity employee;
