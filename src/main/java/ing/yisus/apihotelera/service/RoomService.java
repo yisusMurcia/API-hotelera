@@ -1,6 +1,8 @@
 package ing.yisus.apihotelera.service;
 
+import ing.yisus.apihotelera.Persistence.HotelEntity;
 import ing.yisus.apihotelera.Persistence.RoomEntity;
+import ing.yisus.apihotelera.Persistence.RoomTypeEntity;
 import ing.yisus.apihotelera.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class RoomService {
-    private RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
     public RoomService(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
@@ -46,4 +48,7 @@ public class RoomService {
     }
 
 
+    public List<RoomEntity> findByRoomType(RoomTypeEntity roomType) {
+        return roomRepository.getRoomsByRoomType(roomType.getId());
+    }
 }

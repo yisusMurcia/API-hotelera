@@ -2,6 +2,8 @@ package ing.yisus.apihotelera.service;
 
 import ing.yisus.apihotelera.Persistence.AdminEntity;
 import ing.yisus.apihotelera.Persistence.BillEntity;
+import ing.yisus.apihotelera.Persistence.PaymentEntity;
+import ing.yisus.apihotelera.Persistence.ReservationEntity;
 import ing.yisus.apihotelera.repository.BillRepository;
 import org.springframework.stereotype.Service;
 
@@ -43,4 +45,12 @@ public class BillService {
         return billRepository.findAll();
     }
 
+    public List<BillEntity> getBillsByPayment(PaymentEntity payment) {
+        return billRepository.findByPayment(payment);
+    }
+
+
+    public List<BillEntity> getBillsByReservation(ReservationEntity reservation) {
+        return billRepository.findByReservation(reservation);
+    }
 }

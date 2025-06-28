@@ -3,7 +3,10 @@ package ing.yisus.apihotelera.Controllers;
 import ing.yisus.apihotelera.Exeption.ResourceNotFoundExeption;
 import ing.yisus.apihotelera.Persistence.BillEntity;
 import ing.yisus.apihotelera.service.BillService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Iterator;
@@ -16,37 +19,42 @@ public class BillController {
     BillService billService;
 
     @GetMapping("/getAll")
-    public List<BillEntity> obtenerFacturas(){
-        return billService.getBills();
+    public ResponseEntity<List<BillEntity>> obtenerFacturas(){
+        return ResponseEntity.ok(billService.getBills());
     }
 
     @GetMapping("get/{id}")
-    public BillEntity obtenerFacturaPorId(@PathVariable Integer id){
+    public ResponseEntity<BillEntity> obtenerFacturaPorId(@PathVariable Integer id){
         if(billService.getBillById(id) == null){
+            ResponseEntity.notFound().build();
             throw new ResourceNotFoundExeption("get","id", id);
         }
-        return billService.getBillById(id);
+        return ResponseEntity.ok(billService.getBillById(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void eliminarFactura(@PathVariable Integer id){
+    public ResponseEntity<?> eliminarFactura(@PathVariable Integer id){
         if(billService.getBillById(id) == null){
-            throw new ResourceNotFoundExeption("get","id", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Bill not found with id: " + id);
         }
         billService.deleteBill(id);
+
+        return  ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
-    public void actualizarFactura(@RequestBody BillEntity bill, @PathVariable Integer id){
+    public ResponseEntity<BillEntity> actualizarFactura(@RequestBody BillEntity bill, @PathVariable Integer id){
         if(billService.getBillById(id) == null){
+            ResponseEntity.badRequest();
             throw new ResourceNotFoundExeption("get","id", id);
         }
-        billService.updateBill(bill);
+        return ResponseEntity.ok(billService.updateBill(bill));
     }
 
 
     @PostMapping("/create")
-    public BillEntity guardarFactura(@RequestBody BillEntity bill){
-        return billService.saveBill(bill);
+    public ResponseEntity<BillEntity> guardarFactura(@RequestBody BillEntity bill){
+        return ResponseEntity.ok(billService.saveBill(bill));
     }
 }

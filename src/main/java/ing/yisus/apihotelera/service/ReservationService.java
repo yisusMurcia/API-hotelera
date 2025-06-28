@@ -1,8 +1,11 @@
 package ing.yisus.apihotelera.service;
 
 import ing.yisus.apihotelera.Persistence.ReservationEntity;
+import ing.yisus.apihotelera.Persistence.RoomEntity;
 import ing.yisus.apihotelera.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ReservationService {
@@ -30,8 +33,11 @@ public class ReservationService {
         }
         return null; // or throw an exception
     }
-    public Iterable<ReservationEntity> getAllReservations() {
+    public List<ReservationEntity> getAllReservations() {
         return reservationRepository.findAll();
     }
 
+    public List<ReservationEntity> getReservationsByRoom(RoomEntity room) {
+        return reservationRepository.findByRoom(room);
+    }
 }

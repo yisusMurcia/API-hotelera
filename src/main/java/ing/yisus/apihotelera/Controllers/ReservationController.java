@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservas")
+@RequestMapping("/reservations")
+@RequiredArgsConstructor
 public class ReservationController {
     @Autowired
     ReservationService reservationService;
+    @Autowired
+    BillService billService;
 
-    @GetMapping()
+    @GetMapping("/getAll")
     public Iterable<ReservationEntity> obtenerReservas(){
         return reservationService.getAllReservations();
     }

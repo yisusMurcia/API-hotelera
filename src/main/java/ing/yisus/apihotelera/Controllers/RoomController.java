@@ -11,11 +11,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/rooms")
+@RequiredArgsConstructor
 public class RoomController {
-    @Autowired
     RoomService roomService;
+    ReservationService reservationService;
 
-    @GetMapping()
+    @GetMapping("/getAll")
     public List<RoomEntity> obtenerHabitaciones(){
         return roomService.getAllRooms();
     }
@@ -30,9 +31,13 @@ public class RoomController {
         return roomService.getById(id);
     }
 
-    @GetMapping("/query")
-    public ArrayList<RoomEntity> obtenerHabitacionPorTipo(@RequestParam("roomType") int type){
-        return roomService.getByType(type);
+    @GetMapping("/getByType/{id}")
+    public ResponseEntity<?> obtenerHabitacionPorTipo(@RequestParam("roomType") int id){
+        if(roomService.getByType(id) == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Room type not found with id: " + id);
+        }
+        return ResponseEntity.ok(roomService.getByType(id));
     }
 
     @DeleteMapping(path = "/{Id}")

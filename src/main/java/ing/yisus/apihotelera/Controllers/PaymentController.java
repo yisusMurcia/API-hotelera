@@ -11,16 +11,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
+@RequiredArgsConstructor
 public class PaymentController {
-
     @Autowired
-    PaymentService paymentService;
+    private PaymentService paymentService;
+    @Autowired
+    private BillService billService;
 
-    public List<PaymentEntity> obtenerPagos(){
-        return paymentService.getAllPayments();
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PaymentEntity>> obtenerPagos(){
+        return ResponseEntity.ok(paymentService.getAllPayments());
     }
 
-    public PaymentEntity guardarPago(@RequestBody PaymentEntity payment){
-        return paymentService.savePayment(payment);
+    @PostMapping("/create")
+    public ResponseEntity<?> guardarPago(@RequestBody PaymentEntity payment){
+        if (paymentService.getPaymentById(payment.getId()) == null){
+            return ResponseEntity.ok(paymentService.savePayment(payment));
+        }
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment already exists with id: " + payment.getId());
     }
 }

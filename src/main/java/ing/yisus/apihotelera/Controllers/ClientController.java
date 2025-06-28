@@ -7,6 +7,8 @@ import ing.yisus.apihotelera.service.ClientService;
 import ing.yisus.apihotelera.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,23 +23,25 @@ public class ClientController {
 
 
     @GetMapping("getAll")
-    public List<ClientEntity> obtenerClientes(){
-        return  clientService.getAllClients();
+    public ResponseEntity<List<ClientEntity>> obtenerClientes(){
+        return  ResponseEntity.ok(clientService.getAllClients());
     }
 
     @GetMapping("/get/{id}")
-    public ClientEntity obtenerCliente(@PathVariable int id){
+    public ResponseEntity<ClientEntity> obtenerCliente(@PathVariable int id){
         if(clientService.getClientById(id) == null){
+            ResponseEntity.badRequest();
             throw new ResourceNotFoundExeption("get","id", id);
         }
-        return clientService.getClientById(id);
+        return ResponseEntity.ok(clientService.getClientById(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void eliminarCliente(@PathVariable int id){
+    public ResponseEntity<?> eliminarCliente(@PathVariable int id){
         ClientEntity client = clientService.getClientById(id);
         if(clientService.getClientById(id) == null){
-            throw new ResourceNotFoundExeption("get","id", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Client not found with id: " + id);
         }
         clientService.deleteClient(id);
 
@@ -50,15 +54,16 @@ public class ClientController {
     }
 
     @PutMapping("/update/{id}")
-    public ClientEntity actualizarCliente(@PathVariable int id, @RequestBody ClientEntity cliente){
+    public ResponseEntity<ClientEntity> actualizarCliente(@PathVariable int id, @RequestBody ClientEntity cliente){
         if(clientService.getClientById(id) == null){
+            ResponseEntity.badRequest();
             throw new ResourceNotFoundExeption("get","id", id);
         }
-        return clientService.updateClient(cliente);
+        return ResponseEntity.ok(clientService.updateClient(cliente));
     }
 
     @PostMapping("/create")
-    public ClientEntity guardarCliente(@RequestBody ClientEntity cliente){
-        return clientService.saveClient(cliente);
+    public ResponseEntity<ClientEntity> guardarCliente(@RequestBody ClientEntity cliente){
+        return ResponseEntity.ok(clientService.saveClient(cliente));
     }
 }

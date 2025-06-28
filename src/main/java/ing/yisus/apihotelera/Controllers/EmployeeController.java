@@ -13,13 +13,13 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
 
-    @GetMapping()
-    public List<EmployeeEntity> obtenerEmpleados(){
-        return employeeService.getAllEmployees();
+    @GetMapping("/getAll")
+    public ResponseEntity<List<EmployeeEntity>> obtenerEmpleados(){
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-    @PostMapping()
-    public EmployeeEntity guardarEmpleado(@RequestBody EmployeeEntity employee){
-        return employeeService.saveEmployee(employee);
+    @PostMapping("/create")
+    public ResponseEntity<EmployeeEntity> guardarEmpleado(@RequestBody EmployeeEntity employee){
+        return ResponseEntity.ok(employeeService.saveEmployee(employee));
     }
 }

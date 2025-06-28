@@ -6,6 +6,7 @@ import ing.yisus.apihotelera.Persistence.UserEntity;
 import ing.yisus.apihotelera.service.AdminService;
 import ing.yisus.apihotelera.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,44 +21,46 @@ public class AdminController {
     UserService userService;
 
     @GetMapping("/getAll")
-    public List<AdminEntity> obtenerAdmins(){
-        return adminService.getAllAdmins();
+    public ResponseEntity<List<AdminEntity>> obtenerAdmins(){
+        return ResponseEntity.ok(adminService.getAllAdmins());
     }
 
     @GetMapping("/get/{id}")
-    public AdminEntity obtenerAdminPorId(@PathVariable("id") Integer id){
+    public ResponseEntity<AdminEntity> obtenerAdminPorId(@PathVariable("id") Integer id){
         AdminEntity admin = adminService.getAdminById(id);
         if (admin == null){
+            ResponseEntity.badRequest();
             throw new ResourceNotFoundExeption("get","id",id);
         }
-        return adminService.getAdminById(id);
+        return ResponseEntity.ok(adminService.getAdminById(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void eliminarAdmin(@PathVariable("id") Integer id){
+    public ResponseEntity<?> eliminarAdmin(@PathVariable("id") Integer id) {
         AdminEntity admin = adminService.getAdminById(id);
-        if (admin == null){
-            throw new ResourceNotFoundExeption("delete","id",id);
+        if (admin == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found with id: " + id);
         }
-        adminService.deleteAdmin(id);
-        //Delete the admin id from users
-        List<UserEntity> users = userService.getUsersByAdmin(admin);
 
+        adminService.deleteAdmin(id);
+
+        List<UserEntity> users = userService.getUsersByAdmin(admin);
         for (UserEntity user : users) {
             user.setAdmin(null);
             userService.saveUser(user);
         }
 
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/update/{id}")
-    public void updateAdmin(@RequestBody AdminEntity admin, @PathVariable("id") Integer id){
-        adminService.updateAdmin(admin);
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateAdmin(@RequestBody AdminEntity admin, @PathVariable("id") Integer id){
+        return ResponseEntity.ok(adminService.updateAdmin(admin));
     }
 
     @PostMapping("/create")
-    public AdminEntity guardarAdmin(@RequestBody AdminEntity admin){
-        return adminService.saveAdmin(admin);
+    public ResponseEntity<AdminEntity> guardarAdmin(@RequestBody AdminEntity admin){
+        return ResponseEntity.ok(adminService.saveAdmin(admin));
     }
 }
