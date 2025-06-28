@@ -1,8 +1,14 @@
 package ing.yisus.apihotelera.Controllers;
 
+import ing.yisus.apihotelera.Persistence.AdminEntity;
 import ing.yisus.apihotelera.Persistence.ReservationEntity;
+import ing.yisus.apihotelera.Persistence.UserEntity;
+import ing.yisus.apihotelera.service.BillService;
 import ing.yisus.apihotelera.service.ReservationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +27,25 @@ public class ReservationController {
         return reservationService.getAllReservations();
     }
 
-    @PostMapping()
-    public ReservationEntity guardarReserva(@RequestBody ReservationEntity reservation){
-        return  reservationService.saveReservation(reservation);
+    @PostMapping("/create")
+    public ResponseEntity<?> guardarAdmin(@RequestBody ReservationEntity reservation){
+        return ResponseEntity.ok(reservationService.saveReservation(reservation));
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateAdmin(@RequestBody ReservationEntity reservation, @PathVariable("id") Integer id){
+        return ResponseEntity.ok(reservationService.updateReservation(reservation));
+    }
+
+    @GetMapping("/getByUser/{id}")
+    public ResponseEntity<?> obtenerReservaPorUsuario(@RequestParam("id") int id){
+        if(reservationService.obtenerReservaPorUsuario(id) == null){
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Reservation of user with id: " + id + "not found");
+        }
+
+        return ResponseEntity.ok(reservationService.obtenerReservaPorUsuario(id));
+    }
+
 }

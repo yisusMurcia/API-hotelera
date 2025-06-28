@@ -1,8 +1,12 @@
 package ing.yisus.apihotelera.Controllers;
 
 import ing.yisus.apihotelera.Persistence.RoomEntity;
+import ing.yisus.apihotelera.service.ReservationService;
 import ing.yisus.apihotelera.service.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

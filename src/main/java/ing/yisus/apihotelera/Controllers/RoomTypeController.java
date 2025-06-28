@@ -4,6 +4,7 @@ import ing.yisus.apihotelera.Persistence.RoomEntity;
 import ing.yisus.apihotelera.Persistence.RoomTypeEntity;
 import ing.yisus.apihotelera.service.RoomService;
 import ing.yisus.apihotelera.service.RoomTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

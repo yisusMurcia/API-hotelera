@@ -37,7 +37,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> eliminarCliente(@PathVariable int id){
+    public ResponseEntity<ClientEntity> eliminarCliente(@PathVariable int id){
         ClientEntity client = clientService.getClientById(id);
         if(clientService.getClientById(id) == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -51,6 +51,7 @@ public class ClientController {
             user.setClient(null);
             userService.saveUser(user);
         }
+        return ResponseEntity.noContent(clientService.deleteClient(id));
     }
 
     @PutMapping("/update/{id}")

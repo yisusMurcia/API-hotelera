@@ -40,4 +40,8 @@ public class ReservationService {
     public List<ReservationEntity> getReservationsByRoom(RoomEntity room) {
         return reservationRepository.findByRoom(room);
     }
+
+    public ReservationEntity obtenerReservaPorUsuario(int idUsuario){
+        return reservationRepository.getByUser(idUsuario);
+    }
 }
