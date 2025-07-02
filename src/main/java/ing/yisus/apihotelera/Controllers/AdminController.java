@@ -38,8 +38,8 @@ public class AdminController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminarAdmin(@PathVariable("id") Integer id) {
         AdminEntity admin = adminService.getAdminById(id);
-        if (admin == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found with id: " + id);
+        if(adminService.getAdminById(id) == null){
+            throw new ResourceNotFoundExeption("getById","adminId",id);
         }
 
         adminService.deleteAdmin(id);

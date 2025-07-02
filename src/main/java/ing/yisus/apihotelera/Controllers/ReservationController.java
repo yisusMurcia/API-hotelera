@@ -1,5 +1,6 @@
 package ing.yisus.apihotelera.Controllers;
 
+import ing.yisus.apihotelera.Exeption.ResourceNotFoundExeption;
 import ing.yisus.apihotelera.Persistence.AdminEntity;
 import ing.yisus.apihotelera.Persistence.ReservationEntity;
 import ing.yisus.apihotelera.Persistence.UserEntity;
@@ -34,23 +35,24 @@ public class ReservationController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateAdmin(@RequestBody ReservationEntity reservation, @PathVariable("id") Integer id){
+        if(reservationService.getReservationById(id) == null){
+            throw new ResourceNotFoundExeption("getByType","RoomtypeId",id);
+        }
         return ResponseEntity.ok(reservationService.updateReservation(reservation));
     }
 
     @GetMapping("/getByUser/{id}")
     public ResponseEntity<?> obtenerReservaPorUsuario(@RequestParam("id") int id){
-        if(reservationService.obtenerReservaPorUsuario(id) == null){
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Reservation of user with id: " + id + "not found");
+        if(reservationService.getReservationById(id) == null){
+            throw new ResourceNotFoundExeption("getByType","RoomtypeId",id);
         }
 
         return ResponseEntity.ok(reservationService.obtenerReservaPorUsuario(id));
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminarReserva(@PathVariable("id")int id ){
-        if (reservationService.getReservationById(id) == null){
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe la resesrva con id: " + id);
+        if(reservationService.getReservationById(id) == null){
+            throw new ResourceNotFoundExeption("getById","ReservationId",id);
         }
         reservationService.deleteReservation(id);
         return ResponseEntity.noContent().build();

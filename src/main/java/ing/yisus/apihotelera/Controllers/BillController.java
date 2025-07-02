@@ -35,8 +35,7 @@ public class BillController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminarFactura(@PathVariable Integer id){
         if(billService.getBillById(id) == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Bill not found with id: " + id);
+            throw new ResourceNotFoundExeption("getById","billId",id);
         }
         billService.deleteBill(id);
 

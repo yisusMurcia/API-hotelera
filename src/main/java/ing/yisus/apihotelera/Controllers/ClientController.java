@@ -30,8 +30,7 @@ public class ClientController {
     @GetMapping("/get/{id}")
     public ResponseEntity<ClientEntity> obtenerCliente(@PathVariable int id){
         if(clientService.getClientById(id) == null){
-            ResponseEntity.badRequest();
-            throw new ResourceNotFoundExeption("get","id", id);
+            throw new ResourceNotFoundExeption("getById","clientId",id);
         }
         return ResponseEntity.ok(clientService.getClientById(id));
     }
@@ -40,8 +39,7 @@ public class ClientController {
     public ResponseEntity<ClientEntity> eliminarCliente(@PathVariable int id){
         ClientEntity client = clientService.getClientById(id);
         if(clientService.getClientById(id) == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Client not found with id: " + id);
+            throw new ResourceNotFoundExeption("getById","clientId",id);
         }
         clientService.deleteClient(id);
 
@@ -51,14 +49,14 @@ public class ClientController {
             user.setClient(null);
             userService.saveUser(user);
         }
-        return ResponseEntity.noContent(clientService.deleteClient(id));
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ClientEntity> actualizarCliente(@PathVariable int id, @RequestBody ClientEntity cliente){
         if(clientService.getClientById(id) == null){
             ResponseEntity.badRequest();
-            throw new ResourceNotFoundExeption("get","id", id);
+            throw new ResourceNotFoundExeption("update","id", id);
         }
         return ResponseEntity.ok(clientService.updateClient(cliente));
     }

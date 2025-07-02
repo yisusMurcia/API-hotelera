@@ -1,5 +1,6 @@
 package ing.yisus.apihotelera.Controllers;
 
+import ing.yisus.apihotelera.Exeption.ResourceNotFoundExeption;
 import ing.yisus.apihotelera.Persistence.RoomEntity;
 import ing.yisus.apihotelera.service.ReservationService;
 import ing.yisus.apihotelera.service.RoomService;
@@ -32,14 +33,16 @@ public class RoomController {
 
     @GetMapping(path = "/{Id}")
     public Optional<RoomEntity> obtenerHabitacionPorId(@PathVariable("Id") int id){
+        if(roomService.getById(id).isEmpty()){
+            throw new ResourceNotFoundExeption("getById","RoomId",id);
+        }
         return roomService.getById(id);
     }
 
     @GetMapping("/getByType/{id}")
     public ResponseEntity<?> obtenerHabitacionPorTipo(@RequestParam("roomType") int id){
         if(roomService.getByType(id) == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Room type not found with id: " + id);
+            throw new ResourceNotFoundExeption("getByType","RoomtypeId",id);
         }
         return ResponseEntity.ok(roomService.getByType(id));
     }

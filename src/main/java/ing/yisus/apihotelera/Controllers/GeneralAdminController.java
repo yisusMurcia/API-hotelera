@@ -1,5 +1,6 @@
 package ing.yisus.apihotelera.Controllers;
 
+import ing.yisus.apihotelera.Exeption.ResourceNotFoundExeption;
 import ing.yisus.apihotelera.Persistence.GeneralAdminEntity;
 import ing.yisus.apihotelera.Persistence.UserEntity;
 import ing.yisus.apihotelera.service.GeneralAdminService;
@@ -26,8 +27,8 @@ public class GeneralAdminController {
     @GetMapping("/get/{id}")
     public ResponseEntity<GeneralAdminEntity> obtenerGeneralAdmin(@PathVariable Integer id){
         GeneralAdminEntity generalAdmin = generalAdminService.getGeneralAdminById(id);
-        if(generalAdmin == null){
-            return ResponseEntity.notFound().build();
+        if(generalAdminService.getGeneralAdminById(id) == null){
+            throw new ResourceNotFoundExeption("getById","generalAdminId",id);
         }
         return ResponseEntity.ok(generalAdmin);
     }
@@ -35,8 +36,8 @@ public class GeneralAdminController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> eliminarGeneralAdmin(@PathVariable Integer id){
         GeneralAdminEntity existingGeneralAdmin = generalAdminService.getGeneralAdminById(id);
-        if(existingGeneralAdmin == null){
-            return ResponseEntity.notFound().build();
+        if(generalAdminService.getGeneralAdminById(id) == null){
+            throw new ResourceNotFoundExeption("getById","generalAdminId",id);
         }
         //Set null the value in users
         List<UserEntity> users = userService.getUsersByGeneralAdmin(existingGeneralAdmin);
@@ -51,9 +52,8 @@ public class GeneralAdminController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<GeneralAdminEntity> actualizarGeneralAdmin(@PathVariable Integer id, @RequestBody GeneralAdminEntity generalAdmin){
-        GeneralAdminEntity existingGeneralAdmin = generalAdminService.getGeneralAdminById(id);
-        if(existingGeneralAdmin == null){
-            return ResponseEntity.notFound().build();
+        if(generalAdminService.getGeneralAdminById(id) == null){
+            throw new ResourceNotFoundExeption("getById","generalAdminId",id);
         }
         return ResponseEntity.ok(generalAdminService.updateGeneralAdmin(generalAdmin));
     }

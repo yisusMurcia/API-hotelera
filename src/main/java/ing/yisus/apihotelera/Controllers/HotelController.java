@@ -27,8 +27,8 @@ public class HotelController {
 
     @PostMapping("update/{id}")
     public ResponseEntity<HotelEntity> guardarHoteles(@RequestBody HotelEntity hotel, @RequestParam Integer id){
-        if(hotelService.getHotelById(id) != null){
-            return ResponseEntity.notFound().build();
+        if(hotelService.getHotelById(id) == null){
+            throw new ResourceNotFoundExeption("getById","generalAdminId",id);
         }
         return ResponseEntity.ok(hotelService.saveHotel(hotel));
     }
