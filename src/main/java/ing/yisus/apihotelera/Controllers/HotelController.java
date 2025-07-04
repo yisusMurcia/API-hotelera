@@ -26,10 +26,21 @@ public class HotelController {
     }
 
     @PostMapping("update/{id}")
-    public ResponseEntity<HotelEntity> guardarHoteles(@RequestBody HotelEntity hotel, @RequestParam Integer id){
+    public ResponseEntity<?> guardarHoteles(@RequestBody HotelEntity hotel, @RequestParam Integer id){
         if(hotelService.getHotelById(id) == null){
             throw new ResourceNotFoundExeption("getById","generalAdminId",id);
+        }else{
+            hotelService.saveHotel(hotel);
+            return ResponseEntity.ok("Hotel updated sucessfully");
         }
-        return ResponseEntity.ok(hotelService.saveHotel(hotel));
+    }
+    @PostMapping("/getById/{id}")
+    public ResponseEntity<?> obtenerPorId(@PathVariable("id") int id){
+        if (hotelService.getHotelById(id) == null){
+            throw new ResourceNotFoundExeption("getById","generalAdminId",id);
+        }else {
+            hotelService.getHotelById(id);
+            return ResponseEntity.ok("Got hotel by id "+ id);
+        }
     }
 }

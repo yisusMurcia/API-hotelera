@@ -1,5 +1,6 @@
 package ing.yisus.apihotelera.Controllers;
 
+import ing.yisus.apihotelera.Exeption.ResourceNotFoundExeption;
 import ing.yisus.apihotelera.Persistence.PaymentEntity;
 import ing.yisus.apihotelera.service.BillService;
 import ing.yisus.apihotelera.service.PaymentService;
@@ -27,9 +28,25 @@ public class PaymentController {
 
     @PostMapping("/create")
     public ResponseEntity<?> guardarPago(@RequestBody PaymentEntity payment){
-        if (paymentService.getPaymentById(payment.getId()) == null){
-            return ResponseEntity.ok(paymentService.savePayment(payment));
+        paymentService.savePayment(payment);
+        return ResponseEntity.ok("Payment saved sucessfully");
+    }
+    @PostMapping("/update/{id}")
+    public ResponseEntity<?> actualizarPago(@RequestBody PaymentEntity payment, @PathVariable("id") int id){
+        if (this.paymentService.getPaymentById(id) == null){
+            throw new ResourceNotFoundExeption("PAYMENT_NOT_FOUND","id",id);
+        }else {
+            paymentService.savePayment(payment);
+            return ResponseEntity.ok("Payment updated sucessfully");
         }
-        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment already exists with id: " + payment.getId());
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> eliminarPago(@PathVariable("id")int id){
+        if (paymentService.getPaymentById(id) == null){
+            throw new ResourceNotFoundExeption("PAYMENT_NOT_FOUND","id",id);
+        }else {
+            paymentService.getPaymentById(id);
+            return ResponseEntity.ok("Payment deleted sucessfully");
+        }
     }
 }

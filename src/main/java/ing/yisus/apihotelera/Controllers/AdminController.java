@@ -26,37 +26,39 @@ public class AdminController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<AdminEntity> obtenerAdminPorId(@PathVariable("id") Integer id){
-        AdminEntity admin = adminService.getAdminById(id);
-        if (admin == null){
-            ResponseEntity.badRequest();
-            throw new ResourceNotFoundExeption("get","id",id);
+    public ResponseEntity<?> obtenerAdminPorId(@PathVariable("id") Integer id){
+        if(adminService.getAdminById(id) == null){
+            throw new ResourceNotFoundExeption("get","id", id);
+        }else {
+            adminService.getAdminById(id);
+            return ResponseEntity.ok("Admin found with id" + id);
         }
-        return ResponseEntity.ok(adminService.getAdminById(id));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminarAdmin(@PathVariable("id") Integer id) {
-        AdminEntity admin = adminService.getAdminById(id);
         if(adminService.getAdminById(id) == null){
-            throw new ResourceNotFoundExeption("getById","adminId",id);
+            throw new ResourceNotFoundExeption("get","id", id);
+        }else {
+            List<UserEntity> users = userService.getUsersByAdmin(adminService.getAdminById(id));
+            for (UserEntity user : users) {
+                user.setAdmin(null);
+                userService.saveUser(user);
+            }
+            adminService.deleteAdmin(id);
+            return ResponseEntity.ok("bill updated");
         }
-
-        adminService.deleteAdmin(id);
-
-        List<UserEntity> users = userService.getUsersByAdmin(admin);
-        for (UserEntity user : users) {
-            user.setAdmin(null);
-            userService.saveUser(user);
-        }
-
-        return ResponseEntity.noContent().build();
     }
 
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateAdmin(@RequestBody AdminEntity admin, @PathVariable("id") Integer id){
-        return ResponseEntity.ok(adminService.updateAdmin(admin));
+        if(adminService.getAdminById(id) == null){
+            throw new ResourceNotFoundExeption("get","id", id);
+        }else {
+            adminService.updateAdmin(admin);
+            return ResponseEntity.ok("bill updated");
+        }
     }
 
     @PostMapping("/create")

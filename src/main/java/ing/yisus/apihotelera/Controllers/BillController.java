@@ -24,31 +24,33 @@ public class BillController {
     }
 
     @GetMapping("get/{id}")
-    public ResponseEntity<BillEntity> obtenerFacturaPorId(@PathVariable Integer id){
+    public ResponseEntity<?> obtenerFacturaPorId(@PathVariable Integer id){
         if(billService.getBillById(id) == null){
-            ResponseEntity.notFound().build();
             throw new ResourceNotFoundExeption("get","id", id);
+        }else {
+            billService.getBillById(id);
+            return ResponseEntity.ok("bill updated");
         }
-        return ResponseEntity.ok(billService.getBillById(id));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminarFactura(@PathVariable Integer id){
         if(billService.getBillById(id) == null){
-            throw new ResourceNotFoundExeption("getById","billId",id);
+            throw new ResourceNotFoundExeption("get","id", id);
+        }else {
+            billService.deleteBill(id);
+            return ResponseEntity.ok("bill deleted");
         }
-        billService.deleteBill(id);
-
-        return  ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<BillEntity> actualizarFactura(@RequestBody BillEntity bill, @PathVariable Integer id){
+    public ResponseEntity<?> actualizarFactura(@RequestBody BillEntity bill, @PathVariable Integer id){
         if(billService.getBillById(id) == null){
-            ResponseEntity.badRequest();
             throw new ResourceNotFoundExeption("get","id", id);
+        }else {
+            billService.updateBill(bill);
+            return ResponseEntity.ok("bill updated");
         }
-        return ResponseEntity.ok(billService.updateBill(bill));
     }
 
 

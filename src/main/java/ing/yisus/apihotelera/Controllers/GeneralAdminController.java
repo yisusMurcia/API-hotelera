@@ -25,45 +25,47 @@ public class GeneralAdminController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<GeneralAdminEntity> obtenerGeneralAdmin(@PathVariable Integer id){
+    public ResponseEntity<?> obtenerGeneralAdmin(@PathVariable Integer id){
         GeneralAdminEntity generalAdmin = generalAdminService.getGeneralAdminById(id);
         if(generalAdminService.getGeneralAdminById(id) == null){
             throw new ResourceNotFoundExeption("getById","generalAdminId",id);
+        }else {
+            generalAdminService.getGeneralAdminById(id);
+            return ResponseEntity.ok("generalAdmin found with id"+id);
         }
-        return ResponseEntity.ok(generalAdmin);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> eliminarGeneralAdmin(@PathVariable Integer id){
+    public ResponseEntity<?> eliminarGeneralAdmin(@PathVariable Integer id){
         GeneralAdminEntity existingGeneralAdmin = generalAdminService.getGeneralAdminById(id);
         if(generalAdminService.getGeneralAdminById(id) == null){
             throw new ResourceNotFoundExeption("getById","generalAdminId",id);
-        }
-        //Set null the value in users
-        List<UserEntity> users = userService.getUsersByGeneralAdmin(existingGeneralAdmin);
-        for(UserEntity user : users){
-            user.setGeneralAdmin(null);
-            userService.saveUser(user);
+        }else{
+            //Set null the value in users
+            List<UserEntity> users = userService.getUsersByGeneralAdmin(existingGeneralAdmin);
+            for(UserEntity user : users){
+                user.setGeneralAdmin(null);
+                userService.saveUser(user);
+            }
+            generalAdminService.deleteGeneralAdmin(id);
+            return ResponseEntity.ok("General admin deleted successfully");
         }
 
-        generalAdminService.deleteGeneralAdmin(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<GeneralAdminEntity> actualizarGeneralAdmin(@PathVariable Integer id, @RequestBody GeneralAdminEntity generalAdmin){
+    public ResponseEntity<?> actualizarGeneralAdmin(@PathVariable Integer id, @RequestBody GeneralAdminEntity generalAdmin){
         if(generalAdminService.getGeneralAdminById(id) == null){
             throw new ResourceNotFoundExeption("getById","generalAdminId",id);
+        }else {
+            generalAdminService.updateGeneralAdmin(generalAdmin);
+            return ResponseEntity.ok("General admin updated sucessfully");
         }
-        return ResponseEntity.ok(generalAdminService.updateGeneralAdmin(generalAdmin));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<GeneralAdminEntity>  guardarAdminGeneral(@RequestBody GeneralAdminEntity generalAdmin){
-        if(generalAdminService.getGeneralAdminById(generalAdmin.getIdAdministradorGeneral()) != null){
-            return ResponseEntity.badRequest().body(null);
-        }
-
-        return ResponseEntity.ok(generalAdminService.saveGeneralAdmin(generalAdmin));
+    public ResponseEntity<?>  guardarAdminGeneral(@RequestBody GeneralAdminEntity generalAdmin){
+        generalAdminService.saveGeneralAdmin(generalAdmin);
+        return ResponseEntity.ok("General admin saved sucessfully");
     }
 }
