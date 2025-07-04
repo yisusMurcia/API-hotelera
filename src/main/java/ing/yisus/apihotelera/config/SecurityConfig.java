@@ -1,57 +1,65 @@
 package ing.yisus.apihotelera.config;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import ing.yisus.apihotelera.service.UserDetailsJpa;
+import ing.yisus.apihotelera.util.JwtAuthFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.AbstractRequestMatcherRegistry;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtAuthFilter jwtAuthFilter;
+    private final UserDetailsJpa userDetailsJpa;
+
     @Bean
     public SecurityFilterChain httpSecurity(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(AbstractRequestMatcherRegistry::anyRequest)
-                .httpBasic(Customizer.withDefaults())
+        return http
+                .cors(cors -> cors.configurationSource(configurationSource()))
+                .authorizeHttpRequests(AbstractRequestMatcherRegistry::anyRequest)
                 .csrf(AbstractHttpConfigurer::disable)
-                .authenticationProvider(authenticationProvider())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception{
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, AuthenticationConfiguration authConfig) throws Exception{
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
         return authConfig.getAuthenticationManager();
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService());
-        return provider;
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
-        userDetailsManager.createUser(User.withUsername("Yisus").password("{noop}password").roles("USER").build());
-        userDetailsManager.createUser(User.withUsername("Admin").password("{noop}password").roles("ADMIN").build());
-        return userDetailsManager;
-    }
-
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    public CorsConfigurationSource configurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

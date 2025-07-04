@@ -43,12 +43,20 @@ public class RoomController {
     public ResponseEntity<?> obtenerHabitacionPorTipo(@RequestParam("roomType") int id){
         if(roomService.getByType(id) == null){
             throw new ResourceNotFoundExeption("getByType","RoomtypeId",id);
+        }else{
+            roomService.getByType(id);
+            return ResponseEntity.ok("Rooms found by type: " + id);
         }
-        return ResponseEntity.ok(roomService.getByType(id));
     }
 
-    @DeleteMapping(path = "/{Id}")
-    public void eliminarHabitacionPorId(@PathVariable("Id") int id){
-        roomService.deleteRoom(id);
+    @DeleteMapping(path = "delete/{Id}")
+    public ResponseEntity<?> eliminarHabitacionPorId(@PathVariable("Id") int id){
+        RoomEntity isEmpty = roomService.getRoomById(id);
+        if (isEmpty == null){
+            throw new ResourceNotFoundExeption("getById","RoomId",id);
+        }else {
+            roomService.deleteRoom(id);
+            return ResponseEntity.ok("Room deleted successfully");
+        }
     }
 }

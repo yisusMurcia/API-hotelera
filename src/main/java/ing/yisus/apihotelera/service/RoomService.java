@@ -51,4 +51,8 @@ public class RoomService {
     public List<RoomEntity> findByRoomType(RoomTypeEntity roomType) {
         return roomRepository.getRoomsByRoomType(roomType.getId());
     }
+
+    public List<RoomEntity> getRoomsByRoomType(RoomTypeEntity isEmpty) {
+        return null;
+    }
 }

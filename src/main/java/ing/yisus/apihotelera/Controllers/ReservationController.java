@@ -30,32 +30,38 @@ public class ReservationController {
 
     @PostMapping("/create")
     public ResponseEntity<?> guardarAdmin(@RequestBody ReservationEntity reservation){
-        return ResponseEntity.ok(reservationService.saveReservation(reservation));
+        reservationService.saveReservation(reservation);
+        return ResponseEntity.ok("GeneralAdmin created successfully: " );
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateAdmin(@RequestBody ReservationEntity reservation, @PathVariable("id") Integer id){
         if(reservationService.getReservationById(id) == null){
             throw new ResourceNotFoundExeption("getByType","RoomtypeId",id);
+        }else {
+            reservationService.updateReservation(reservation);
+            return ResponseEntity.ok("Reservation updated successfully: ");
         }
-        return ResponseEntity.ok(reservationService.updateReservation(reservation));
     }
 
     @GetMapping("/getByUser/{id}")
     public ResponseEntity<?> obtenerReservaPorUsuario(@RequestParam("id") int id){
         if(reservationService.getReservationById(id) == null){
             throw new ResourceNotFoundExeption("getByType","RoomtypeId",id);
+        }else{
+            reservationService.getReservationById(id);
+            return ResponseEntity.ok("Reservations found by user: " + id);
         }
 
-        return ResponseEntity.ok(reservationService.obtenerReservaPorUsuario(id));
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminarReserva(@PathVariable("id")int id ){
         if(reservationService.getReservationById(id) == null){
             throw new ResourceNotFoundExeption("getById","ReservationId",id);
+        }else{
+            reservationService.deleteReservation(id);
+            return ResponseEntity.ok("Reservation deleted successfully");
         }
-        reservationService.deleteReservation(id);
-        return ResponseEntity.noContent().build();
     }
 
 }
